@@ -16,13 +16,25 @@ const fetchData = () => {
         }
 
         // Check if the iteration is over
-        // Run amimation if so
-        if ( dataArr.length === dataArr.indexOf(customData) + 1 ) {
+        // Run animation if so
+        if (dataArr.length === dataArr.indexOf(customData) + 1) {
           animationTimeline();
-        } 
+        }
       });
     });
 };
+
+// Play the background music as soon as the page loads
+document.addEventListener("DOMContentLoaded", () => {
+  const backgroundMusic = document.getElementById("background-music");
+  backgroundMusic.play().catch(error => {
+    console.log("Autoplay was prevented:", error);
+    // Fallback: Play music on first user interaction (e.g., a click)
+    document.addEventListener("click", () => {
+      backgroundMusic.play();
+    }, { once: true }); // The { once: true } ensures this listener runs only once
+  });
+});
 
 // Animation Timeline
 const animationTimeline = () => {
@@ -292,13 +304,14 @@ const animationTimeline = () => {
       "+=1"
     );
 
-  // tl.seek("currentStep");
-  // tl.timeScale(2);
-
   // Restart Animation on click
   const replyBtn = document.getElementById("replay");
   replyBtn.addEventListener("click", () => {
     tl.restart();
+    // Restart the music when the animation restarts
+    const backgroundMusic = document.getElementById("background-music");
+    backgroundMusic.currentTime = 0; // Reset to the beginning
+    backgroundMusic.play();
   });
 };
 
